@@ -43,3 +43,9 @@ int main()
     yylex();
     return 0;
 }
+
+commands:
+nano prog.l
+lex prog.l
+cc lex.yy.c -ll
+./a.out
