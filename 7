@@ -1,0 +1,60 @@
+7.Write a YACC program to implement a top-down parser for the given grammar.
+
+topdown.y
+
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int yylex(void);
+void yyerror(const char *s);
+%}
+
+%token ID
+
+%%
+
+expr : ID
+     | expr '+' ID
+     | expr '-' ID
+     ;
+
+%%
+
+void yyerror(const char *s)
+{
+    printf("Invalid string\n");
+}
+
+int main()
+{
+    printf("Enter expression using id: ");
+    if (yyparse() == 0)
+        printf("Parsing successful\n");
+
+    return 0;
+}
+
+topdown.l
+
+
+%{
+#include "y.tab.h"
+%}
+
+%%
+
+[a-zA-Z]+  { return ID; }
+[+]         { return '+'; }
+[-]         { return '-'; }
+[ \t]       ;
+\n          return 0;
+.           return yytext[0];
+
+%%
+
+commands:
+yacc -d file_name.y
+lex file_name.l
+gcc y.tab.c lex.yy.c -o file_name
+./file_name 
